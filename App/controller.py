@@ -27,6 +27,7 @@
 import config as cf
 from App import model
 import csv
+import os
 
 """
 El controlador se encarga de mediar entre la vista y el modelo.
@@ -39,8 +40,8 @@ recae sobre el controlador.
 # ___________________________________________________
 #  Inicializacion del catalogo
 # ___________________________________________________
-def iiciar_catalog():
-    catalog= model.new_graph():
+def iniciar_catalog():
+    catalog= model.new_graph()
     return catalog
        
 
@@ -52,8 +53,9 @@ def loadTrips(citibike):
     for filename in os.listdir(cf.data_dir):
         if filename.endswith('.csv'):
             print('Cargando archivo: ' + filename)
-            loadFile(analyzer, filename)
-    return analyzer
+            loadFile(citibike, filename)
+    return citibike
+    
 
 def loadFile(citibike, tripfile):
     """
@@ -69,5 +71,16 @@ def loadFile(citibike, tripfile):
 #  Funciones para consultas
 # ___________________________________________________
 
-def rec_1(catalog,stacion1,station2):
+def  totalConnections(catalog):
+    return model.num_edges(catalog)
+
+def totalStops(catalog):
+    return model.num_vertices(catalog)
+
+def num_scc(catalog):
+    return model.numSCC(catalog)
+
+def scc_1(catalog,station1,station2):
+    return model.sameCC(catalog,station1,station2)
+
     

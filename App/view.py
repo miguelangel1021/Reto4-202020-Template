@@ -42,7 +42,7 @@ operación seleccionada.
 # ___________________________________________________
 #  Variables
 # ___________________________________________________
-
+recursionLimit=1000001
 
 # ___________________________________________________
 #  Menu principal
@@ -54,13 +54,14 @@ def printMenu():
     print("1- Inicializar Analizador")
     print("2- Cargar información:")
     print("3- Calcular clusters:")
+    print("4- Estaciones fuertemente conectadas:")
     print("0- Salir")
     print("*******************************************")
 
 
 def optionTwo():
-    print("\nCargando información de transporte de singapur ....")
-    controller.loadServices(cont, servicefile)
+    print("\nCargando información de citibike....")
+    controller.loadTrips(cont)
     numedges = controller.totalConnections(cont)
     numvertex = controller.totalStops(cont)
     print('Numero de vertices: ' + str(numvertex))
@@ -71,9 +72,17 @@ def optionTwo():
     
 
 def optionThree():
-    print('El número de componentes conectados es: ' +
-          str(controller.connectedComponents(cont)))
+    print('El número de clusters es: ' +
+          str(controller.num_scc(cont)))
 
+def optionFour():
+    vertice1=input("Ingrese la Estacion 1:")
+    vertice2=input("Ingrese la Estacion 2:")
+    los_2=controller.scc_1(cont,vertice1,vertice2)
+    if los_2==False:
+        print("Las estaciones no estan fuertemente conectadas...")
+    else: 
+        print("Las estaciones estan fuertemente conectadas...")
 
 while True:
     printMenu()
@@ -82,7 +91,7 @@ while True:
     if int(inputs[0]) == 1:
         print("\nInicializando....")
         # cont es el controlador que se usará de acá en adelante
-        cont = controller.init()
+        cont = controller.iniciar_catalog()
 
     elif int(inputs[0]) == 2:
         executiontime = timeit.timeit(optionTwo, number=1)
@@ -91,8 +100,11 @@ while True:
     elif int(inputs[0]) == 3:
         executiontime = timeit.timeit(optionThree, number=1)
         print("Tiempo de ejecución: " + str(executiontime))
-
-else:
+    
+    elif int(inputs[0])==4:
+        executiontime = timeit.timeit(optionFour, number=1)
+        print("Tiempo de ejecucion: " + str(executiontime) )
+    else:
         sys.exit(0)
 sys.exit(0)
 

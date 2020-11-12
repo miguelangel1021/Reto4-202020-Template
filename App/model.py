@@ -24,6 +24,7 @@
  *
  """
 import config
+from DISClib.Algorithms.Graphs import scc
 from DISClib.ADT.graph import gr
 from DISClib.ADT import map as m
 from DISClib.ADT import list as lt
@@ -31,6 +32,7 @@ from DISClib.DataStructures import listiterator as it
 from DISClib.Algorithms.Graphs import scc
 from DISClib.Algorithms.Graphs import dijsktra as djk
 from DISClib.Utils import error as error
+from DISClib.DataStructures import edge as e
 assert config
 
 """
@@ -44,6 +46,7 @@ de creacion y consulta sobre las estructuras de datos.
 
 # Funciones para agregar informacion al grafo
 def new_graph():
+    citibike={}
     citibike["graph"] = gr.newGraph(datastructure='ADJ_LIST',
                                   directed=True,
                                   size=1000,
@@ -74,7 +77,9 @@ def addConnection(citibike, origin, destination, duration):
     """
     edge = gr.getEdge(citibike ["graph"], origin, destination)
     if edge is None:
-        gr.addEdge(analyzer["graph"], origin, destination, duration)
+        gr.addEdge(citibike["graph"], origin, destination, duration)
+    else:
+        e.updateAverageWeigth(edge,duration)
     
     return citibike
 
@@ -84,13 +89,18 @@ def addConnection(citibike, origin, destination, duration):
 # Funciones de consulta
 # ==============================
 
-def numSCC(graph, sc):
-    sc = scc.KosarajuSCC(graphl)
+def numSCC(graph):
+    sc = scc.KosarajuSCC(graph["graph"])
     return scc.connectedComponents(sc)
 
 def sameCC(sc, station1, station2):
-    return scc.stronglyConnected(sc, station1, station2)
+    return scc.stronglyConnected(sc["graph"], station1, station2)
 
+def num_vertices(graph):
+    return gr.numVertices(graph["graph"])
+
+def num_edges(graph):
+    return gr.numEdges(graph["graph"])
 # ==============================
 # Funciones Helper
 # ==============================
