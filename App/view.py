@@ -142,7 +142,7 @@ def optionOcho():
     tiempo=input("ingrese_tiempo en minutos: ")
     estacion=input("ingrese_estacion inicial: ")
     dfs=controller.ruta_circular(cont,tiempo,estacion)
-    print(dfs)
+    
     if lt.isEmpty(dfs):
         print("No se han encontrado rutas circulares en el tiempo disponible...")
     else:
