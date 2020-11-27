@@ -31,7 +31,8 @@ from App import controller
 from DISClib.ADT import stack
 import timeit
 assert config
-
+from DISClib.DataStructures import listiterator as it
+from DISClib.ADT import list as lt
 """
 La vista se encarga de la interacción con el usuario.
 Presenta el menu de opciones  y  por cada seleccion
@@ -55,6 +56,10 @@ def printMenu():
     print("2- Cargar información:")
     print("3- Calcular clusters:")
     print("4- Estaciones fuertemente conectadas:")
+    print("5- Estaciones criticas: ")
+    print("6- Recomendar ruta: ")
+    print("7- Rutas de interes turistico: ")
+    print("8- Rutas Circulares: ")
     print("0- Salir")
     print("*******************************************")
 
@@ -83,6 +88,79 @@ def optionFour():
         print("Las estaciones no estan fuertemente conectadas...")
     else: 
         print("Las estaciones estan fuertemente conectadas...")
+def optionFive():
+    estaciones=controller.estaciones_criticas(cont)
+    
+    print("Las estaciones top de llegda son:")
+    for i in range (0,3):
+        print(estaciones[i])
+    print("Las estaciones top de salida son:")
+    for i in range (3,6):
+        print(estaciones[i])
+    print("Las estaciones menos usadas son:")
+    for i in range (6,9):
+        print(estaciones[i])
+
+def optionSeven():
+    l1=input("Ingrese la latitud inicial: ")
+    L1=input("Ingrese la longitud inicial: ")
+    l2=input("Ingrese la latitud final: ")
+    L2=input("Ingrese la longitud final: ")
+    path_,estacion_salida,estacion_llegada,costo= controller.ruta_interes(cont,l1,L1,l2,L2)
+    print("la estacion mas cercana a la cordenada inicial es: ",estacion_salida)
+    print("la estacion mas cercana a la cordenada final es: ",estacion_llegada)
+    print("El tiempo para llegar a la estacion final es: ",costo)
+    print("***************************************")
+    print("Las estaciones en la ruta son: ")
+    iterador=it.newIterator(path_)
+    while it.hasNext(iterador):
+        element=it.next(iterador)
+        print(element)
+    
+def optionSix():
+    rango=input("ingrese el rango de edad: ")
+    path_,estacion_salida,estacion_llegada,costo=controller.recomendar_rutas(cont,rango)
+    if path_ is None: 
+        print("No hay estaciones de salida ni llegada para ese rango de edad")
+    elif path_ == 0:
+        print("La estacion de salida recomendada es: ",estacion_salida)
+        print("La estacion de llegada recomendada es: ",estacion_llegada)
+        print("El tiempo estimado de viaje es:", costo)
+    else:
+        print("La estacion de salida recomendada es: ",estacion_salida)
+        print("La estacion de llegada recomendada es: ",estacion_llegada)
+        print("El tiempo estimado de viaje es:", costo)
+        print("***************************************")
+        print("Las estaciones en la ruta son: ")
+        iterador=it.newIterator(path_)
+        while it.hasNext(iterador):
+            element=it.next(iterador)
+            print(element)
+
+
+def optionOcho():
+    tiempo=input("ingrese_tiempo en minutos: ")
+    estacion=input("ingrese_estacion inicial: ")
+    dfs=controller.ruta_circular(cont,tiempo,estacion)
+    print(dfs)
+    if lt.isEmpty(dfs):
+        print("No se han encontrado rutas circulares en el tiempo disponible...")
+    else:
+        tamaño=lt.size(dfs)
+        print("Se encontraron",tamaño,"rutas circulares..." )
+        print("Estas son las rutas circulares encontradas: \n")
+    
+        iterador=it.newIterator(dfs)
+        while it.hasNext(iterador):
+            diccionario=it.next(iterador)
+            peso=diccionario["Peso"]/60
+            lista=diccionario["ruta"]
+            for i in lista:
+                print(i)
+            print(lista[0])
+            print("La duracion estimada del viaje es:",round(peso,2),"minutos")
+            print("************************"*2)
+
 
 while True:
     printMenu()
@@ -104,6 +182,20 @@ while True:
     elif int(inputs[0])==4:
         executiontime = timeit.timeit(optionFour, number=1)
         print("Tiempo de ejecucion: " + str(executiontime) )
+    
+    elif int(inputs[0])==5:
+        executiontime = timeit.timeit(optionFive, number=1)
+        print("Tiempo de ejecucion: " + str(executiontime) )
+    elif int(inputs[0])==6:
+        executiontime = timeit.timeit(optionSix, number=1)
+        print("Tiempo de ejecucion: " + str(executiontime) )
+    elif int(inputs[0])==7:
+        executiontime = timeit.timeit(optionSeven, number=1)
+        print("Tiempo de ejecucion: " + str(executiontime) )
+    elif int(inputs[0])==8:
+        executiontime = timeit.timeit(optionOcho, number=1)
+        print("Tiempo de ejecucion: " + str(executiontime) )
+
     else:
         sys.exit(0)
 sys.exit(0)
@@ -112,3 +204,4 @@ sys.exit(0)
 """
 Menu principal
 """
+
