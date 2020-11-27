@@ -59,7 +59,7 @@ def printMenu():
     print("5- Estaciones criticas: ")
     print("6- Recomendar ruta: ")
     print("7- Rutas de interes turistico: ")
-    print("8- Rutas Circulares: ")
+    print("8- Rutas circules: ")
     print("0- Salir")
     print("*******************************************")
 

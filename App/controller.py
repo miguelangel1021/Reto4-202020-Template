@@ -65,6 +65,7 @@ def loadFile(citibike, tripfile):
                                 delimiter=",")
     for trip in input_file:
         model.addTrip(citibike, trip)
+    
     return citibike
 
 # ___________________________________________________
@@ -83,4 +84,18 @@ def num_scc(catalog):
 def scc_1(catalog,station1,station2):
     return model.sameCC(catalog,station1,station2)
 
-    
+def estaciones_criticas(catalog):
+    return model.estaciones_criticas(catalog)
+
+def ruta_interes(catalog,latitud1,longitud1,latitud2,longitud2):
+    path_,estacion_salida,estacion_llegada,costo=model.Ruta_interes_turistico(catalog,latitud1,longitud1,latitud2,longitud2)
+    return path_,estacion_salida,estacion_llegada,costo
+
+def recomendar_rutas(catalog,Rango):
+    path_,estacion_salida,estacion_llegada,costo=model.Recomendar_rutas(catalog,Rango)
+    return path_,estacion_salida,estacion_llegada,costo
+
+
+def ruta_circular(grafo,tiempo,estacion_inicio):
+    dfs=model.Ruta_turistica_circular(grafo,tiempo,estacion_inicio)
+    return dfs

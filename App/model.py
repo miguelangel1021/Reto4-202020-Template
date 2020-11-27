@@ -352,7 +352,6 @@ def Recomendar_rutas(grafo,rango_edad):
         entry_llegada=om.get(valor["Edades_llegada"],rango_edad)
         cant_edades_salida=None
         cant_edades_llegada=None 
-       
         if entry_salida is not None:
             cant_edades_salida=me.getValue(entry_salida)
         if entry_llegada is not None:

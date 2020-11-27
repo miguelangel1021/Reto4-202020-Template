@@ -23,13 +23,13 @@
  * Dario Correal
  *
  """
-
 import config
 from DISClib.DataStructures import adjlist as g
 from DISClib.DataStructures import listiterator as it
 from DISClib.ADT import map as map
 from DISClib.ADT import stack as stk
 from DISClib.Utils import error as error
+from DISClib.DataStructures import mapentry as me
 assert config
 
 
@@ -135,3 +135,67 @@ def pathTo(search, vertex):
         return path
     except Exception as exp:
         error.reraise(exp, 'dfs:pathto')
+
+
+
+def DepthFirstSearchsSCC(graph, source, est_k):
+    """
+    Genera un recorrido DFS sobre el grafo graph
+    Args:
+        graph:  El grafo a recorrer
+        source: Vertice de inicio del recorrido.
+    Returns:
+        Una estructura para determinar los vertices
+        conectados a source
+    Raises:
+        Exception
+    """
+    try:
+        search = {
+                  'source': source,
+                  'visited': None,
+                  }
+
+        search['visited'] = map.newMap(numelements=g.numVertices(graph),
+                                       maptype='PROBING',
+                                       comparefunction=graph['comparefunction'])
+
+        map.put(search['visited'], source, {'marked': True, 'edgeTo': None})
+        dfsVertexSCC(search, graph, source, est_k ,None)
+        return search
+    except Exception as exp:
+        error.reraise(exp, 'dfs:DFS')
+
+
+def dfsVertexSCC(search, graph, vertex,est_k_idscc,anterior):
+    """
+    Funcion auxiliar para calcular un recorrido DFS
+    Args:
+        search: Estructura para almacenar el recorrido
+        vertex: Vertice de inicio del recorrido.
+    Returns:
+        Una estructura para determinar los vertices
+        conectados a source
+    Raises:
+        Exception
+    """
+    try:
+        
+        entry_source= map.get(est_k_idscc,vertex)
+        Idscc_=me.getValue(entry_source)
+        adjlst = g.adjacents(graph, vertex)
+        adjslstiter = it.newIterator(adjlst)
+        while (it.hasNext(adjslstiter)):
+            w = it.next(adjslstiter)
+            entry= map.get(est_k_idscc,w)
+            scc=me.getValue(entry)
+            if Idscc_==scc:
+                visited = map.get(search['visited'], w)
+                if visited is None:
+                    map.put(search['visited'],
+                            w, {'marked': True, 'edgeTo': vertex})
+                    dfsVertexSCC(search, graph, w,est_k_idscc,vertex)
+
+        return search
+    except Exception as exp:
+        error.reraise(exp, 'dfs:dfsVertex')
